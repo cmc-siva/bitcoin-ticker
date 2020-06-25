@@ -1,7 +1,10 @@
 package au.cmcmarkets.ticker.data.api
 
+import au.cmcmarkets.ticker.data.model.TickerCurrency
+import io.reactivex.Single
+
 interface BitcoinApi {
 
-    //TODO. Bitcoin api here
+    fun getTickerDetails(): Single<Map<String, TickerCurrency>>
 
 }
