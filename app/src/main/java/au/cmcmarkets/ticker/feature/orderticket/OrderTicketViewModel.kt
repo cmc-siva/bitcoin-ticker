@@ -1,6 +1,5 @@
 package au.cmcmarkets.ticker.feature.orderticket
 
-import android.util.Log
 import androidx.lifecycle.*
 import au.cmcmarkets.ticker.data.repository.TickerRepository
 import au.cmcmarkets.ticker.feature.orderticket.OrderTicketContract.Actions
@@ -12,8 +11,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 //TODO Change this to 15 after testing
-private const val POLL_PERIOD_IN_SECS = 5L
-private const val GBP_TICKER = "GBP"
+const val POLL_PERIOD_IN_SECS = 5L
+const val GBP_TICKER = "GBP"
 
 class OrderTicketViewModel @Inject constructor(
     private val tickerRepository: TickerRepository,
@@ -45,7 +44,6 @@ class OrderTicketViewModel @Inject constructor(
                 .observeOn(schedulers.mainUiThread())
                 .subscribe(
                     {
-                        Log.d("Response", "ticker response " + it.toString())
                         mutableViewState.value = ViewState(
                             false,
                             data = it
