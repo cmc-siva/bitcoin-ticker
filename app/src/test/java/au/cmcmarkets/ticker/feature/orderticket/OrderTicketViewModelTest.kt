@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import au.cmcmarkets.ticker.data.model.TickerCurrency
 import au.cmcmarkets.ticker.data.repository.TickerRepository
+import au.cmcmarkets.ticker.feature.orderticket.OrderTicketContract.ViewState
 import au.cmcmarkets.ticker.utils.Helper.lambdaMock
 import au.cmcmarkets.ticker.utils.TestSchedulersProvider
 import io.reactivex.Scheduler
@@ -28,14 +29,14 @@ import java.util.concurrent.TimeUnit
 class OrderTicketViewModelTest {
 
     @Captor
-    lateinit var viewStateCaptor: ArgumentCaptor<OrderTicketContract.ViewState>
+    lateinit var viewStateCaptor: ArgumentCaptor<ViewState>
 
     @Mock
     lateinit var mockTickerRepository: TickerRepository
 
     lateinit var viewModel: OrderTicketViewModel
 
-    private val testObserver = lambdaMock<Observer<OrderTicketContract.ViewState>>()
+    private val testObserver = lambdaMock<Observer<ViewState>>()
 
     private var testScheduler: TestScheduler = TestScheduler()
 
@@ -60,7 +61,6 @@ class OrderTicketViewModelTest {
     @Test
     fun `when ticker update is available verify view state is updated`() {
         //Given
-
         val sampleSingle = Single.just(getSampleTickerCurrency())
         `when`(mockTickerRepository.getTickerDetails(GBP_TICKER)).thenReturn(sampleSingle)
 
@@ -72,7 +72,7 @@ class OrderTicketViewModelTest {
         viewStateCaptor.run {
             verify(testObserver).onChanged(capture())
             val tickerResultViewStates = allValues
-            val viewStateOne = tickerResultViewStates[0] as OrderTicketContract.ViewState
+            val viewStateOne = tickerResultViewStates[0] as ViewState
             assertFalse(viewStateOne.isLoading)
             assertEquals(viewStateOne.data, getSampleTickerCurrency())
         }
@@ -118,13 +118,86 @@ class OrderTicketViewModelTest {
         }
     }
 
+    @Test
+    fun `when unit is entered verify amount is updated`() {
+
+        //given
+        //Given
+        val sampleSingle = Single.just(getSampleTickerCurrency())
+        `when`(mockTickerRepository.getTickerDetails(GBP_TICKER)).thenReturn(sampleSingle)
+
+        //When
+        viewModel.startTickerUpdates()
+        testScheduler.triggerActions()
+        viewModel.onUnitChanged("10")
+
+        //then
+        assertEquals("Calculated amount matches", 1000.0, viewModel.liveDataHolder.editAmount.value)
+        assertEquals(
+            "Calculated amount format matches",
+            "1,000.00",
+            viewModel.liveDataHolder.getFormattedAmount()
+        )
+
+    }
+
+    @Test
+    fun `when unit is cleared verify live data is also cleared`() {
+
+        //given
+        //Given
+        val sampleSingle = Single.just(getSampleTickerCurrency())
+        `when`(mockTickerRepository.getTickerDetails(GBP_TICKER)).thenReturn(sampleSingle)
+
+        //When
+        viewModel.startTickerUpdates()
+        testScheduler.triggerActions()
+        viewModel.onUnitChanged("")
+
+        //then
+        assertEquals("Unit cleared", null, viewModel.liveDataHolder.editUnits.value)
+        assertEquals(
+            "Cleared unit format matches",
+            "",
+            viewModel.liveDataHolder.getFormattedUnits()
+        )
+
+    }
+
+    @Test
+    fun `when amount is entered verify unit is updated`() {
+
+        //given
+        //Given
+        val sampleSingle = Single.just(getSampleTickerCurrency())
+        `when`(mockTickerRepository.getTickerDetails(GBP_TICKER)).thenReturn(sampleSingle)
+
+        //When
+        viewModel.startTickerUpdates()
+        testScheduler.triggerActions()
+        viewModel.onAmountChanged("100")
+
+        //then
+        assertEquals("Calculated unit matches", 1.0, viewModel.liveDataHolder.editUnits.value)
+        assertEquals(
+            "Calculated unit format matches",
+            "1.00",
+            viewModel.liveDataHolder.getFormattedUnits()
+        )
+
+    }
+
+    private fun getSampleViewState(): ViewState {
+        return ViewState(false, getSampleTickerCurrency())
+    }
+
     private fun getSampleTickerCurrency(): TickerCurrency {
         return TickerCurrency(
             "$",
-            121.20,
-            122.30,
-            120.50,
-            121.20
+            100.00,
+            100.00,
+            100.00,
+            100.00
         )
     }
 

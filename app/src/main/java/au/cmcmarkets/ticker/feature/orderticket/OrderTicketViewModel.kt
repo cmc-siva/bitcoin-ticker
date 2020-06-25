@@ -104,5 +104,4 @@ class OrderTicketViewModel @Inject constructor(
     fun onCancel() {
         mutableAction.value = Actions.Cancel
     }
-
 }
