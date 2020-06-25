@@ -22,5 +22,6 @@
     -->
     <style name="ThemeOverlay.CMC.AppTheme.OrderPlacement" parent="">
         <item name="colorPrimary">@color/cyan_800</item>
+        <item name="colorOnSurface">?attr/colorPrimary</item>
     </style>
 </resources>

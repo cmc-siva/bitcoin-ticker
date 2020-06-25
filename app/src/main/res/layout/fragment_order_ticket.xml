@@ -128,6 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
+                android:text='@{viewModel.liveDataHolder.formattedUnits}'
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -149,15 +150,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
+                android:text='@{viewModel.liveDataHolder.formattedAmount}'
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/dark_grey"
             android:onClick="@{() -> viewModel.onCancel()}"
             android:padding="16dp"
@@ -172,6 +176,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_marginBottom="16dp"
+            android:enabled="@{viewModel.liveDataHolder.isConfirmBtnEnabled}"
             android:padding="16dp"
             android:text="@string/label_confirm"
             app:layout_constraintBottom_toBottomOf="parent"

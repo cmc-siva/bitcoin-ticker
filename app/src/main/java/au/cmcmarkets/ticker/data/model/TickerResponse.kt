@@ -1,5 +1,6 @@
 package au.cmcmarkets.ticker.data.model
 
+import au.cmcmarkets.ticker.utils.formatCurrency
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -22,4 +23,10 @@ data class TickerCurrency(
 ) {
     val spread: Double
         get() = sellPrice - buyPrice
+    val formattedBuyPrice: String
+        get() = buyPrice.formatCurrency()
+    val formattedSellPrice: String
+        get() = sellPrice.formatCurrency()
+    val formattedSpread: String
+        get() = spread.formatCurrency()
 }
