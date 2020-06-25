@@ -1,19 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/titleTxt"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="au.cmcmarkets.ticker.feature.orderticket.OrderTicketViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem" />
+        android:layout_height="match_parent"
+        android:theme="@style/ThemeOverlay.CMC.AppTheme.OrderPlacement">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/labelBuy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/label_buy"
+            android:textColor="@color/cyan_800"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/labelSell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/label_sell"
+            android:textColor="@color/amber_500"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtBuyValue"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/buy_sell_textview_height"
+            android:background="@color/cyan_800_alpha"
+            android:gravity="center"
+            android:text='@{viewModel.viewState.data.formattedBuyPrice}'
+            android:textAlignment="center"
+            android:textColor="@color/yello_green"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/txtSellValue"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12123.23" />
+
+        <TextView
+            android:id="@+id/txtSellValue"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/buy_sell_textview_height"
+            android:background="@color/dark_grey"
+            android:gravity="center"
+            android:text='@{viewModel.viewState.data.formattedSellPrice}'
+            android:textAlignment="center"
+            android:textColor="@color/yello_green"
+            app:layout_constraintEnd_toStartOf="@+id/txtBuyValue"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12123.23" />
+
+        <TextView
+            android:id="@+id/txtSpreadValue"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:text='@{viewModel.viewState.data.formattedSpread}'
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/txtSellValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="1.02" />
+
+        <TextView
+            android:id="@+id/labelUnits"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/label_units"
+            android:textColor="?attr/textPrimaryColor"
+            app:layout_constraintEnd_toStartOf="@+id/labelAmount"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtSellValue" />
+
+        <TextView
+            android:id="@+id/labelAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@{@string/label_amount(viewModel.viewState.data.symbol)}"
+            android:textColor="?attr/textPrimaryColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/labelUnits"
+            app:layout_constraintTop_toBottomOf="@+id/txtBuyValue" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editUnits"
+            style="@style/CMC.AppTheme.Widget.MaterialComponents.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/labelUnits"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/labelUnits"
+            tools:showIn="@layout/fragment_order_ticket">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtTextUnits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textColor="@color/white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editAmount"
+            style="@style/CMC.AppTheme.Widget.MaterialComponents.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/editUnits"
+            app:layout_constraintTop_toBottomOf="@+id/labelUnits"
+            tools:showIn="@layout/fragment_order_ticket">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtTextAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textColor="@color/white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/dark_grey"
+            android:onClick="@{() -> viewModel.onCancel()}"
+            android:padding="16dp"
+            android:text="@string/label_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnConfirm"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:padding="16dp"
+            android:text="@string/label_confirm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnCancel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

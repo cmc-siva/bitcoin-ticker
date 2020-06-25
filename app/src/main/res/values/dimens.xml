@@ -2,5 +2,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="default_horizontal_margin">16dp</dimen>
     <dimen name="default_vertical_margin">16dp</dimen>
+    <dimen name="buy_sell_textview_height">120dp</dimen>
 
 </resources>

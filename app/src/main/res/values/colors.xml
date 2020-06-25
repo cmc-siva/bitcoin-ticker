@@ -6,5 +6,10 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="black">#000000</color>
-
+    <color name="white">#FFFFFF</color>
+    <color name="dark_grey">#554D4D4D</color>
+    <color name="cyan_800">#00838F</color>
+    <color name="cyan_800_alpha">#5500838F</color>
+    <color name="amber_500">#ff9800</color>
+    <color name="yello_green">#19B706</color>
 </resources>
