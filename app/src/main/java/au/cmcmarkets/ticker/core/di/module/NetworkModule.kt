@@ -1,6 +1,7 @@
 package au.cmcmarkets.ticker.core.di.module
 
 import au.cmcmarkets.ticker.data.api.BitcoinApi
+import au.cmcmarkets.ticker.data.repository.TickerRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -8,6 +9,7 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
@@ -15,8 +17,7 @@ import javax.inject.Singleton
 class NetworkModule {
 
     companion object {
-        //TODO("Update this to the base URL")
-        private const val API_BASE_URL = ""
+        private const val API_BASE_URL = "https://blockchain.info/"
     }
 
     private val httpLoggingInterceptor: HttpLoggingInterceptor by lazy {
@@ -48,6 +49,7 @@ class NetworkModule {
         return Retrofit.Builder()
             .baseUrl(API_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(okHttpClient)
             .build()
     }
@@ -56,5 +58,11 @@ class NetworkModule {
     @Singleton
     fun provideNetworkApi(retrofit: Retrofit): BitcoinApi {
         return retrofit.create(BitcoinApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTickerRepository(bitcoinApi: BitcoinApi): TickerRepository {
+        return TickerRepository(bitcoinApi)
     }
 }
